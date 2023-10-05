@@ -4,7 +4,8 @@ import config
 import openai
 import tqdm
 import html
-
+from datetime import datetime
+   
 # Function to fetch open user stories that haven't been "Instructor Reviewed"
 def fetch_open_user_stories():
     url = f"https://dev.azure.com/"
@@ -15,7 +16,7 @@ def fetch_open_user_stories():
     
     payload = json.dumps({
           "query": """SELECT [System.Id] FROM workitems WHERE [System.WorkItemType] = 'User Story' 
-          AND [Custom.InstructorReviewed] = 'False'
+          AND [Custom.AIReviewed] = 'False'
           AND [System.CreatedDate] >= @Today - 60
           
           """
@@ -26,6 +27,7 @@ def fetch_open_user_stories():
         print(f"Failed to fetch user stories. Error: {response.json()}")
         return []
     work_items = response.json()["workItems"]
+    print(f'Found {len(work_items)} user stories to review.')    
     return work_items
     
 # Function to fetch the details of a work item
@@ -113,10 +115,12 @@ if __name__ == "__main__":
     work_items = get_work_items_with_details()
     
     for work_item in tqdm.tqdm(work_items):
+        print(f'Processing work item {work_item.id}')
         feedback = get_chat_feedback(work_item)
         fixed_feedback = html.escape(feedback).replace('\n', '<br>')
         work_item.feedback = fixed_feedback
         update_work_item(work_item.id, fixed_feedback)
         
-    json.dump([wi.__dict__ for wi in work_items], open("work_items.json","w"))
+    now = datetime.now().strftime('%m%d%H%M)
+    json.dump([wi.__dict__ for wi in work_items], open("work_items{now}.json","w"))
         
