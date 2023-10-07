@@ -122,5 +122,5 @@ if __name__ == "__main__":
         update_work_item(work_item.id, fixed_feedback)
         
     now = datetime.now().strftime('%m%d%H%M')
-    json.dump([wi.__dict__ for wi in work_items], open("work_items{now}.json","w"))
+    json.dump([wi.__dict__ for wi in work_items], open(f"work_items{now}.json","w"))
         
