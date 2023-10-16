@@ -1,3 +1,7 @@
+# No need for the work_items.json file to be tracked
+work_items.json
+work_items*.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
