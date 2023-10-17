@@ -32,11 +32,11 @@ def fetch_open_user_stories():
     
 # Function to fetch the details of a work item
 # Function to fetch the details of a work item by its ID
-def fetch_work_item_details(work_item_id):
+def fetch_work_item_details(work_item_id, fields):
 
     url = f"https://dev.azure.com/{config.DEVOPS_ORG}/_apis/wit/workitems/{work_item_id}"
     params = {"api-version":config.API_VERSION,
-              "fields":"System.Description,Microsoft.VSTS.Common.AcceptanceCriteria,System.TeamProject"
+              "fields":",".join(fields)
               }
     response = requests.get(url, headers=config.PRIMARY_HEADERS,params=params)
     if response.status_code != 200:
@@ -45,12 +45,14 @@ def fetch_work_item_details(work_item_id):
     return response.json()
     
 class WorkItem(object):
-    def __init__(self, id, description, acceptance_criteria):
+    
+    def __init__(self, id, description, acceptance_criteria, story_points=0):
         self.id = id
         self.description = description
         self.acceptance_criteria = acceptance_criteria
         self.feedback = None
-
+        self.story_points = story_points
+    
 
 def get_work_items_with_details():
     work_items = []
@@ -59,21 +61,40 @@ def get_work_items_with_details():
     for wid in fetch_open_user_stories():
         # Get the details of the work item
         id = wid.get("id")
-        wid_details = fetch_work_item_details(id)
-        
-        # Gather the fields from the response
-        _fields = wid_details.get('fields', {})
-        description = _fields.get("System.Description","No description")
-        acceptance_criteria = _fields.get("Microsoft.VSTS.Common.AcceptanceCriteria","No acceptance criteria")
-
-        work_items.append(WorkItem(id, description, acceptance_criteria))
+        work_items.append(get_work_item(id))
     
     return work_items
 
+def get_work_item(id):
+    '''
+    Gather the work item details and create a new work_item object
+    
+    : returns : WorkItem
+    '''
+    fields = ["System.Description",
+              "Microsoft.VSTS.Common.AcceptanceCriteria",
+              "System.TeamProject",
+              "Microsoft.VSTS.Scheduling.StoryPoints"
+    ]
+    wid_details = fetch_work_item_details(id,fields)
+        
+        # Gather the fields from the response
+    _fields = wid_details.get('fields', {})
+    description = _fields.get("System.Description","No description")
+    acceptance_criteria = _fields.get("Microsoft.VSTS.Common.AcceptanceCriteria","No acceptance criteria")
+    story_points = _fields.get("Microsoft.VSTS.Scheduling.StoryPoints",0)
+    work_item = WorkItem(id, description, acceptance_criteria,story_points=story_points)
+    return work_item
+
 
 def get_chat_feedback(work_item):
+    '''
+    Go to ChatGPT and ask for feedback on the user story.
+    
+    :returns: response from ChatGPT
+    '''
     conversation= [
-               {"role":"system", "content":config.BACKGROUND},
+               {"role":"system", "content":config.STORY_BACKGROUND},
                {"role":"user", "content":work_item.description},
                {"role":"user", "content":work_item.acceptance_criteria}
     ]

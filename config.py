@@ -13,7 +13,7 @@ PRIMARY_HEADERS = {
     }
 OPEN_API_KEY = os.getenv("OPENAI_API_KEY")
 
-BACKGROUND="""
+STORY_BACKGROUND="""
 The user receiving the feedback is a student in a business school pursuing a degree in information systems. 
 The student is taking a course on software development and is learning about user stories.
 
