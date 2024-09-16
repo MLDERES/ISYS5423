@@ -6,7 +6,7 @@ load_dotenv()
 USER_STORY_REVIEW_PAT = os.getenv("FA_TOKEN")
 DEVOPS_AUTH_TOKEN = f'{base64.b64encode(f"PAT:{USER_STORY_REVIEW_PAT}".encode("utf-8")).decode("utf-8")}'
 DEVOPS_ORG = "WCOB-ISYS5423"
-API_VERSION = "7.2-preview.2"
+API_VERSION = "7.1-preview.2"
 PRIMARY_HEADERS = {
         'Content-Type': 'application/json',
         'Authorization': f'Basic {DEVOPS_AUTH_TOKEN}',
