@@ -1,9 +1,20 @@
 from dotenv import load_dotenv
 import os
 import base64
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+
+key_vault_url = "https://story-feedback-kv.vault.azure.net/"
+
+def get_secret(secret_name):
+    credential = DefaultAzureCredential()
+    client = SecretClient(vault_url=key_vault_url, credential=credential)
+    return client.get_secret(secret_name).value
 
 load_dotenv()
-USER_STORY_REVIEW_PAT = os.getenv("FA_TOKEN")
+
+#USER_STORY_REVIEW_PAT = os.getenv("FA_TOKEN")
+USER_STORY_REVIEW_PAT = get_secret("FA-TOKEN")
 DEVOPS_AUTH_TOKEN = f'{base64.b64encode(f"PAT:{USER_STORY_REVIEW_PAT}".encode("utf-8")).decode("utf-8")}'
 DEVOPS_ORG = "WCOB-ISYS5423"
 API_VERSION = "7.1-preview.2"
@@ -11,7 +22,8 @@ PRIMARY_HEADERS = {
         'Content-Type': 'application/json',
         'Authorization': f'Basic {DEVOPS_AUTH_TOKEN}',
     }
-OPEN_API_KEY = os.getenv("OPENAI_API_KEY")
+#OPEN_API_KEY = os.getenv("OPENAI_API_KEY")
+OPEN_API_KEY = get_secret("OPENAI-API-KEY")
 
 STORY_BACKGROUND="""
 The user receiving the feedback is a student in a business school pursuing a degree in information systems. 
