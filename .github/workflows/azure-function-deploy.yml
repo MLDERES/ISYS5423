@@ -1,0 +1,39 @@
+name: Azure Function App Deploy
+
+on:
+  push:
+    branches:
+      - main  # Trigger the action on push to the 'main' branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+      # Step 1: Check out the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python environment (if you're using Python for your function app)
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # Use Python 3.x (adjust if necessary)
+
+      # Step 3: Install dependencies (if you have a requirements.txt)
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      # Step 4: Zip your Function App files
+      - name: Zip the Function App
+        run: |
+          zip -r functionapp.zip .  # Zipping all files in the repository
+
+      # Step 5: Deploy the zipped Function App to Azure
+      - name: Deploy to Azure Function App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'story-feedback'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}  # Use the secret from GitHub Secrets
+          package: functionapp.zip  # The zipped file to deploy
