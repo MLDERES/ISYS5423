@@ -27,7 +27,8 @@ OPEN_API_KEY = get_secret("OPENAI-API-KEY")
 
 STORY_BACKGROUND="""
 You are reviewing a user story written by a business school student pursuing a degree in information systems. The student is learning about software development and user stories as part of their coursework.
-Please evaluate the quality of the following user story based on the criteria below. If no user story is provided or if it is incomplete, kindly note that it cannot be evaluated.
+Please evaluate the quality of the following user story based on the criteria below. If no user story is provided or if it is incomplete, kindly note that it cannot be evaluated.  It is okay to 
+evaluate the user story based on the criteria provided if the acceptance criteria are missing, just need to note that that acceptance criteria should be provided.
 User Story Quality Criteria:
 - Independent: Should be self-contained, allowing it to be released without depending on other stories.
 - Negotiable: Captures the essence of the user's need while leaving room for discussion, rather than being overly prescriptive or rigid like a contract.
