@@ -26,31 +26,41 @@ PRIMARY_HEADERS = {
 OPEN_API_KEY = get_secret("OPENAI-API-KEY")
 
 STORY_BACKGROUND="""
-The user receiving the feedback is a student in a business school pursuing a degree in information systems. 
-The student is taking a course on software development and is learning about user stories.
-
-I want to assess this quality of this user story for these criteria:
-Independent: Should be self-contained in a way that allows to be released without depending on one another.
-Negotiable: Only capture the essence of user's need, leaving room for conversation. User story should not be written like contract.
-Valuable: Delivers value to end user.
-Estimable: User stories have to able to be estimated so it can be properly prioritized and fit into sprints.
-Small: A user story is a small chunk of work that allows it to be completed in about 3 to 4 days.
-Testable: A user story has to be confirmed via pre-written acceptance criteria.
-
-Please assess the quality of this user story (using a 'needs work', 'good' or 'great') and then provide feedback on how to improve it if required.
-
-Use a template like this:
-Overall quality: [needs work, good, great]
-Independent: a few words on how to improve this or not
-Negotiable: a few words on how to improve this or not
-Valuable: a few words on how to improve this or not
-Estimable: a few words on how to improve this or not
-Small: a few words on how to improve this or not
-Testable: a few words on how to improve this or not
-
-Acceptance Criteria: [needs work, good, great]
-a few words on how to improve this or not
-
-If it would be valuable, offer an alternative user story that would be better.
-
+You are reviewing a user story written by a business school student pursuing a degree in information systems. The student is learning about software development and user stories as part of their coursework.
+Please evaluate the quality of the following user story based on the criteria below. If no user story is provided or if it is incomplete, kindly note that it cannot be evaluated.
+User Story Quality Criteria:
+- Independent: Should be self-contained, allowing it to be released without depending on other stories.
+- Negotiable: Captures the essence of the user's need while leaving room for discussion, rather than being overly prescriptive or rigid like a contract.
+- Valuable: Delivers tangible value to the end user or business.
+- Estimable: Can be estimated for effort, allowing prioritization and planning within sprints.
+- Small: Small enough to be completed in 3-4 days within a sprint.
+- Testable: Includes pre-written acceptance criteria that confirm whether the story is complete and works as expected.
+Evaluation:
+Assess each category with one of the following: Needs Work, Good, Great. Provide feedback on how to improve it if necessary.
+Overall Quality: [Needs Work / Good / Great]
+- Independent: [Needs Work / Good / Great]  
+  Feedback:
+- Negotiable: [Needs Work / Good / Great]  
+  Feedback:
+- Valuable: [Needs Work / Good / Great]  
+  Feedback:
+- Estimable: [Needs Work / Good / Great]  
+  Feedback:
+- Small: [Needs Work / Good / Great]  
+  Feedback:
+- Testable: [Needs Work / Good / Great]  
+  Feedback:
+---
+Acceptance Criteria Quality: [Needs Work / Good / Great]
+The acceptance criteria should follow this format:
+- This story will be finished when: {Expected outcome, clearly testable}
+- Out of scope: {Any areas not covered by this story}
+Note: The acceptance criteria must be specific, testable, and clear. If the student has left this blank or written something too vague to be tested, provide feedback on how to improve it.
+---
+Suggestions for Improvement:  
+If applicable, suggest an alternative version of the user story that better fits the criteria.
+---
+Additional Notes:
+- Use a positive, constructive tone to guide the student’s learning process.
+- If there is no user story provided, or the submission is blank, acknowledge that it cannot be evaluated and suggest submitting a complete story for feedback.
 """

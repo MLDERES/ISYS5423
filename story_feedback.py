@@ -7,6 +7,13 @@ client = OpenAI(api_key=config.OPEN_API_KEY)
 import tqdm
 import html
 from datetime import datetime
+# Adding default logging
+import logging
+logging.basicConfig(level=logging.INFO)
+
+INFO = logging.INFO
+DEBUG = logging.DEBUG
+ERROR = logging.ERROR
 
 # Function to fetch open user stories that haven't been "Instructor Reviewed"
 def fetch_open_user_stories():
@@ -25,10 +32,10 @@ def fetch_open_user_stories():
     # Get the list of work items
     response = requests.post(url, headers=config.PRIMARY_HEADERS, data=payload, params=params)
     if response.status_code != 200:
-        print(f"Failed to fetch user stories. Error: {response}")
+        ERROR(f"Failed to fetch user stories. Error: {response}")
         return []
     work_items = response.json()['workItems']
-    print(f'Found {len(work_items)} user stories to review.')    
+    logging.debug(f'Found {len(work_items)} user stories to review.')    
     return work_items
 
 # Function to fetch the details of a work item
@@ -41,7 +48,7 @@ def fetch_work_item_details(work_item_id, fields):
               }
     response = requests.get(url, headers=config.PRIMARY_HEADERS,params=params)
     if response.status_code != 200:
-        print(f"Failed to fetch work item details. Error: {response.json()}")
+        ERROR(f"Failed to fetch work item details. Error: {response.json()}")
         return None
     return response.json()
 
@@ -53,7 +60,6 @@ class WorkItem(object):
         self.acceptance_criteria = acceptance_criteria
         self.feedback = None
         self.story_points = story_points
-
 
 def get_work_items_with_details():
     work_items = []
@@ -138,7 +144,7 @@ if __name__ == "__main__":
     work_items = get_work_items_with_details()
 
     for work_item in tqdm.tqdm(work_items):
-        print(f'Processing work item {work_item.id}')
+        logging.debug(f'Processing work item {work_item.id}')
         feedback = get_chat_feedback(work_item)
         fixed_feedback = html.escape(feedback).replace('\n', '<br>')
         work_item.feedback = fixed_feedback
