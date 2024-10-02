@@ -28,12 +28,14 @@ jobs:
       # Step 4: Zip your Function App files
       - name: Zip the Function App
         run: |
-          zip -r functionapp.zip .  # Zipping all files in the repository
+          zip -r functionapp.zip .  -x "*.vscode*" -x "*.github*" -x "*.devcontainer*" -x "*.ipynb" # Zipping all files in the repository
 
       # Step 5: Deploy the zipped Function App to Azure
+      # Step 5: Deploy to Azure Function App
       - name: Deploy to Azure Function App
-        uses: azure/webapps-deploy@v2
+        uses: Azure/functions-action@v1
         with:
-          app-name: 'story-feedback'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}  # Use the secret from GitHub Secrets
-          package: functionapp.zip  # The zipped file to deploy
+          app-name: 'story-feedback'  # Azure Function App name
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}  # GitHub Secrets holding Azure publish profile
+          package: functionapp.zip  # Zipped function app
+
