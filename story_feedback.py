@@ -118,7 +118,8 @@ def update_work_item(work_item_id, comment):
         'Authorization': f'Basic {config.DEVOPS_AUTH_TOKEN}',
     }
     params = {"api-version":config.API_VERSION}
-
+    quality = determine_quality(comment)
+    
     # Prepare the payload
     payload = [
         {
@@ -129,6 +130,11 @@ def update_work_item(work_item_id, comment):
         {   "op": "add",
             "path": "/fields/Custom.AIReviewed",
             "value": "True"
+        },
+        {
+            "op": "add",
+            "path": "/fields/Custom.Quality",
+            "value": quality
         }
     ]
     response = requests.request("PATCH", url, headers=headers, data=json.dumps(payload), params=params)
@@ -138,7 +144,22 @@ def update_work_item(work_item_id, comment):
     else:
         print(f"Failed to update work item. Status code: {response.status_code}, Error: {response.text}")
 
-if __name__ == "__main__":
+def determine_quality(feedback):
+    '''
+    Determine the quality of the feedback received from ChatGPT
+    
+    :returns: quality of the feedback
+    '''
+    # If the overall quality feedback is good or Good then return Good
+    if "overall quality: good" in feedback.lower():
+        return "Good"
+    if "overall quality: great" in feedback.lower():
+        return "Great"
+    if "overall quality: needs work" in feedback.lower():
+        return "Needs Work"
+    return ""
+
+def assess_all_workitems():
     # DON'T FORGET TO SET YOUR OPENAI API KEY IN THE CONFIG FILE
     # IT NEEDS TO BE RE ADDED EVERY YEAR
     work_items = get_work_items_with_details()
@@ -147,8 +168,10 @@ if __name__ == "__main__":
         logging.debug(f'Processing work item {work_item.id}')
         feedback = get_chat_feedback(work_item)
         fixed_feedback = html.escape(feedback).replace('\n', '<br>')
-        work_item.feedback = fixed_feedback
         update_work_item(work_item.id, fixed_feedback)
 
     now = datetime.now().strftime('%m%d%H%M')
     json.dump([wi.__dict__ for wi in work_items], open(f"work_items{now}.json","w"))
+
+if __name__ == "__main__":
+    assess_all_workitems()    

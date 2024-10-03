@@ -23,7 +23,6 @@ def timed_story_feedback(myTimer: func.TimerRequest) -> None:
         logging.debug(f'Processing work item {work_item.id}')
         feedback = get_chat_feedback(work_item)
         fixed_feedback = html.escape(feedback).replace('\n', '<br>')
-        work_item.feedback = fixed_feedback
         update_work_item(work_item.id, fixed_feedback)
         logging.debug(f"Work item {work_item.id} updated.")
         
