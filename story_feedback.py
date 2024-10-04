@@ -93,6 +93,20 @@ def get_work_item(id):
     work_item = WorkItem(id, description, acceptance_criteria,story_points=story_points)
     return work_item
 
+# Fetch work item comments
+def fetch_work_item_comments(id):
+    url = f"https://dev.azure.com/{config.DEVOPS_ORG}/_apis/wit/workItems/{id}/comments"
+    response = requests.get(url, headers=config.PRIMARY_HEADERS)
+    return response.json()
+
+# Get the last comment
+def get_last_comment(id):
+    comments = fetch_work_item_comments(1489)
+    if comments.get('comments'):
+        last_comment = comments['comments'][-1]['text']  # Get the last comment's text
+    else:
+        last_comment = None
+    return last_comment
 
 def get_chat_feedback(work_item):
     '''
@@ -106,7 +120,7 @@ def get_chat_feedback(work_item):
                {"role":"user", "content":f"The acceptance criteria are: {work_item.acceptance_criteria}"}
     ]
 
-    response = client.chat.completions.create(model='gpt-3.5-turbo',messages=conversation)
+    response = client.chat.completions.create(model='chatgpt-4o-latest',messages=conversation)
     message = response.choices[0].message.content
     return message
 
@@ -151,6 +165,7 @@ def determine_quality(feedback):
     :returns: quality of the feedback
     '''
     # If the overall quality feedback is good or Good then return Good
+    
     if "overall quality: good" in feedback.lower():
         return "Good"
     if "overall quality: great" in feedback.lower():
