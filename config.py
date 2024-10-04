@@ -41,8 +41,6 @@ If at least 4 criteria are rated Good or better, the overall quality is Good. Ot
 If the overall quality is Needs Work, provide suggestions on how to improve the story.
 If the overall quality is Good or Great, provide feedback on what was done well.
 
-
-
 User Story Quality Criteria:
 Independent: Should be self-contained, allowing it to be released without depending on other stories.
 Negotiable: Captures the essence of the user's need while leaving room for discussion.

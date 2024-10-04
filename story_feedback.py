@@ -26,6 +26,7 @@ def fetch_open_user_stories():
             SELECT[System.Id] FROM workitems
             WHERE[System.WorkItemType] = 'User Story'
             AND [Custom.AIReviewed] = 'False' AND [System.ChangedDate] >= @Today - 60
+            AND [System.State] = 'New' OR [System.State] = 'Active'
             """
     payload = json.dumps({"query": query
     })
