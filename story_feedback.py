@@ -28,8 +28,8 @@ def fetch_open_user_stories():
             AND [Custom.AIReviewed] = 'False' AND [System.ChangedDate] >= @Today - 60
             AND [System.State] = 'New' OR [System.State] = 'Active'
             """
-    payload = json.dumps({"query": query
-    })
+    payload = json.dumps({"query": query})
+    
     # Get the list of work items
     response = requests.post(url, headers=config.PRIMARY_HEADERS, data=payload, params=params)
     if response.status_code != 200:
