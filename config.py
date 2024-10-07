@@ -82,7 +82,8 @@ Out of scope: {Areas not covered by this story}
 If acceptance criteria are missing or unclear, suggest how to improve them.
 
 Suggestions for Improvement:
-If applicable, suggest an alternative version of the user story that better fits the criteria.
+If applicable, suggest an alternative version of the user story that better fits the criteria.  Be sure that the suggestion for an alternative
+story is similar to the story that was presented and not just a generic story that meets the criteria.
 
 Additional Notes:
 Keep the feedback specific and actionable.

@@ -155,7 +155,7 @@ def update_work_item(work_item_id, comment):
     response = requests.request("PATCH", url, headers=headers, data=json.dumps(payload), params=params)
 
     if response.status_code == 200:
-        print("Work item updated successfully.")
+        print("Work item updated successfully. {work_item_id}")
     else:
         print(f"Failed to update work item. Status code: {response.status_code}, Error: {response.text}")
 
