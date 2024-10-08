@@ -190,6 +190,5 @@ def assess_all_workitems():
     json.dump([wi.__dict__ for wi in work_items], open(f"work_items{now}.json","w"))
 
 if __name__ == "__main__":
-    # assess_all_workitems()    
-    workitems = get_work_items_with_details()
-    pass
+    assess_all_workitems()    
+    
