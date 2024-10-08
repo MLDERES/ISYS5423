@@ -26,7 +26,7 @@ def fetch_open_user_stories():
             SELECT[System.Id] FROM workitems
             WHERE[System.WorkItemType] = 'User Story'
             AND [Custom.AIReviewed] = 'False' AND [System.ChangedDate] >= @Today - 60
-            AND [System.State] = 'New' OR [System.State] = 'Active'
+            AND ([System.State] = 'New' OR [System.State] = 'Active')
             """
     payload = json.dumps({"query": query})
     
@@ -190,4 +190,6 @@ def assess_all_workitems():
     json.dump([wi.__dict__ for wi in work_items], open(f"work_items{now}.json","w"))
 
 if __name__ == "__main__":
-    assess_all_workitems()    
+    # assess_all_workitems()    
+    workitems = get_work_items_with_details()
+    pass
